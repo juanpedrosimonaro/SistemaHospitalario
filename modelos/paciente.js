@@ -9,6 +9,12 @@ Paciente.init({
     autoIncrement: true,
     primaryKey: true
   },
+  fechaDeNacimiento: {
+    type: DataTypes.DATE
+  },
+  genero: {
+    type: DataTypes.ENUM('Masculino','Femenino'),
+  },
   historialMedico: {
     type: DataTypes.TEXT
   }

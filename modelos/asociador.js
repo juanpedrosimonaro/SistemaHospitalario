@@ -8,6 +8,7 @@ const Factura = require("./factura");
 const Seguro = require("./seguro");
 const Especialidad = require("./especialidad");
 const Posologia = require("./posologia");
+const Medicamento = require("./medicamento");
 
 const sequelize = require("../db");
 

@@ -1,4 +1,10 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser')
+const authRutas = require('./rutas/authRutas');
+//const pacienteRutas = require('./rutas/pacienteRutas');
+//const medicoRutas = require('./rutas/medicoRutas');
+const administradorRutas = require('./rutas/administradorRutas');
 
 // express app
 const app = express();
@@ -8,11 +14,70 @@ app.set('view engine', 'ejs');
 // middleware
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+const verificarToken = (req, res, next) => {
+  console.log(req.cookies)
+  const token = req.cookies.token;
+  if (!token) {
+    return res.redirect('/auth/iniciar-sesion');
+  }
+  jwt.verify(token, 'clave_ultrasecreta', (err, decoded) => {
+    if (err) {
+      console.log
+      return res.redirect('/auth/iniciar-sesion');
+    }
+    req.usuario = decoded.usuario;
+    next();
+  });
+}
+const verificarPaciente = (req, res, next) => {
+  if(req.usuario && req.usuario.rol == "Paciente"){
+    next()
+  }else{
+    return res.status(403).send('Acceso denegado');
+  }
+}
+
+const verificarMedico = (req, res, next) => {
+  if(req.usuario && req.usuario.rol == "Medico"){
+    next()
+  }else{
+    return res.status(403).send('Acceso denegado');
+  }
+}
+
+const verificarAdministrador = (req, res, next) => {
+  if(req.usuario && req.usuario.tipo == "Administrador"){
+    next()
+  }else{
+    return res.status(403).send('Acceso denegado');
+  }
+}
 
 // rutas
-app.get('/', (req,res)=>{
-  res.render('index', {title:"Pagina Principal"});
+app.get('/',verificarToken, (req,res)=>{
+  switch(req.usuario.tipo){
+    case "Paciente":
+      res.redirect('/paciente/')
+      // res.render('gestionPaciente', {title:"Pagina Principal"});
+      break;
+    case "Medico":
+      res.redirect('/medico/')
+      //res.render('gestionMedico', {title:"Pagina Principal"});
+      break;
+    case "Administrador":
+      res.redirect('/administrador/')
+      res.render('gestionAdministrador', {title:"Pagina Principal"});
+      break;
+    default:
+      res.clearCookie(token);
+  }
 })
+app.use('/auth',authRutas);
+//app.use('/paciente', verificarPaciente, pacienteRutas);
+//app.use('/medico', verificarMedico, medicoRutas);
+app.use('/administrador', verificarAdministrador, administradorRutas);
+
 
 const server = app.listen(3000,()=>{
   console.log('Servidor iniciado en el puerto 3000')

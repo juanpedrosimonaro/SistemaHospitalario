@@ -1,0 +1,21 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+      <a href="/auth/registro">Registrar nuevo usuario</a>
+      <h1>Inicio de sesión</h1>
+      <div class="inicio content">
+        <form action="/auth/iniciar-sesion" method="POST">
+          <label for="usuario">Ingresar usuario:</label>
+          <input type="text" id="usuario" name="nombre" required><br>
+          <label for="contrasena">Ingrese contraseña:</label>
+          <input type="password" id="contrasena" name="contrasena" required><br>
+          <input type="submit" value="Subir">
+        </form>
+      </div>
+
+      <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

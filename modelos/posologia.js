@@ -1,7 +1,7 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../db");
 
-class Receta extends Model{}
+class Posologia extends Model{}
 
 Posologia.init({
   cantidad: {

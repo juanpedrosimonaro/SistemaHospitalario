@@ -16,6 +16,10 @@ Factura.init({
   serviciosPrestados: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  estado: {
+    type: DataTypes.ENUM('Emitida','Vencida','Pagada','Parcialmente Pagada', 'Cancelada', 'En disputa'),
+    allowNull: false
   }
 },{ sequelize });
 

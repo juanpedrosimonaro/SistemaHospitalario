@@ -1,0 +1,101 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+  <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      document.getElementById('tipo').addEventListener('change', function () {
+        console.log("Tipo cambiÛ de valor")
+        document.getElementById('camposPaciente').style.display = (this.value == 'Paciente') ? 'block' : 'none';
+        document.getElementById('camposMedico').style.display = (this.value == 'Medico') ? 'block' : 'none';
+        document.getElementById('camposAdministrador').style.display = (this.value == 'Administrador') ? 'block' : 'none';
+      });
+      document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var tipoUsuario = document.getElementById('tipo').value;
+        var datos = {
+          nombre: document.getElementById('nombre').value,
+          contrasena: document.getElementById('contrasena').value,
+          email: document.getElementById('email').value,
+          telefono: document.getElementById('telefono').value,
+          tipo: tipoUsuario,
+        };
+
+        if (tipoUsuario == 'Paciente') {
+          datos.historialMedico = document.getElementById('historialMedico').value;
+          datos.fechaDeNacimiento = document.getElementById('fechaDeNacimiento').value;
+          datos.genero = document.getElementById('genero').value;
+        } else if (tipoUsuario == 'Medico') {
+          datos.horaEntrada = document.getElementById('horaEntrada').value;
+          datos.horaSalida = document.getElementById('horaSalida').value;
+          datos.especialidad = document.getElementById('especialidad').value;
+        } else if (tipoUsuario == 'Administrador') {
+          datos.departamento = document.getElementById('departamento').value;
+        }
+        fetch('/auth/registro', {
+          method: 'POST',
+          body: new URLSearchParams(datos)
+        }).then((response) => {
+          if (response.ok) {
+            console.log(response);
+          }
+        }).catch((error) => alert(error))
+      })
+    })
+  </script>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+      <h1>Registrar Usuario</h1>
+      <div class="inicio content">
+        <form action="/auth/registro" method="POST">
+          <label for="usuario">Ingresar usuario:</label>
+          <input type="text" id="nombre" name="nombre" required><br>
+          <label for="email">Ingresar email:</label>
+          <input type="email" id="email" name="email" required><br>
+          <label for="telefono">Ingresar telefono:</label>
+          <input type="tel" id="telefono" name="telefono" pattern="[0-9]{3}-[0-9]{7}" required><br>
+          <label for="contrasena">Ingrese contrase√±a:</label>
+          <input type="password" id="contrasena" name="contrasena" required><br>
+          <label for="tipo">Ingrese Tipo de Usuario:</label>
+          <select name="tipo" id="tipo" required>
+            <option value="" disabled selected hidden>Seleccione un tipo de Usuario</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Paciente">Paciente</option>
+            <option value="Medico">Medico</option>
+          </select><br>
+          <div id="camposPaciente" style="display: none;">
+            <label for="fechaDeNacimiento">Ingrese Fecha de Nacimiento:</label>
+            <input type="date" name="fechaDeNacimiento" id="fechaDeNacimiento"><br>
+            <label for="genero">Ingrese genero:</label>
+            <select name="genero" id="genero">
+              <option value="" disabled selected hidden>Seleccione el g√©nero</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+            </select><br>
+            <label for="historialMedico">Ingrese Historial MÈdico:</label>
+            <textarea name="historialMedico" id="historialMedico"></textarea><br>
+          </div>
+          <div id="camposMedico" style="display: none;">
+            <label for="horaEntrada">Hora de entrada:</label>
+            <input type="time" name="horaEntrada" id="horaEntrada" value="07:00"><br>
+            <label for="horaSalida">Hora de salida:</label>
+            <input type="time" name="horaSalida" id="horaSalida" value="18:00"><br>
+            <select id="especialidad" name="especialidad">
+              <option value="" disabled selected hidden>Seleccione su especialidad</option>
+              <% especialidades.forEach(especialidad =>{ %>
+                <option value="<%= especialidad.nombre %>"><%= especialidad.nombre %></option>
+              <%}) %>
+            </select>
+          </div>
+          <div id="camposAdministrador" style="display: none;">
+            <label for="departamento">Departamento:</label>
+            <input type="text" name="departamento" id="departamento"><br>
+          </div>
+
+          <input type="submit" value="Subir">
+        </form>
+      </div>
+
+      <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

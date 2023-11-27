@@ -15,7 +15,7 @@ Medicamento.init({
   },
   descripcion: {
     type: DataTypes.TEXT
-  }
+  },
   efectosSecundarios: {
     type: DataTypes.TEXT
   }

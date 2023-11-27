@@ -9,9 +9,14 @@ Usuario.init({
     autoIncrement: true,
     primaryKey: true
   },
+  contrasena: {
+    type: DataTypes.STRING(60),
+    allowNull: false
+  },
   nombre: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   email: {
     type: DataTypes.STRING,

@@ -11,12 +11,12 @@ Medico.init({
   },
   horaInicial: {
     type: DataTypes.TIME,
-    allowNull: false;
+    allowNull: false
   },
 
   horaFinal: {
     type: DataTypes.TIME,
-    allowNull: false;
+    allowNull: false
   }
 },{ sequelize });
 
