@@ -13,6 +13,10 @@ Seguro.init({
     type: DataTypes.STRING,
     allowNull: false
   },
+  nombreCompania: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   cobertura: {
     type: DataTypes.INTEGER,
     allowNull: false

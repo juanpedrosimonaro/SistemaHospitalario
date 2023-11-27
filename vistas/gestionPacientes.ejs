@@ -1,0 +1,100 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+
+      document.querySelectorAll(".btnAct").forEach(btnAct => btnAct.addEventListener("click", (e) => {
+        e.preventDefault();
+        const fila = e.target.parentElement.parentElement.parentElement;
+        const filaArray = [...fila.children];
+        filaArray.pop();
+        const paciente = {};
+        paciente.id = fila.dataset.id;
+        filaArray.forEach((celda) => {
+          paciente[celda.dataset.name] = celda.innerText;
+        })
+        console.log(paciente);
+        fetch(`/administrador/editar-paciente/`, {
+          method: 'PUT',
+          body: new URLSearchParams(paciente)
+        }).then((response) => {
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch((error) => alert(error))
+      }));
+
+      document.querySelectorAll(".btnEli").forEach(btnEli => btnEli.addEventListener("click", (e) => {
+        var fila = e.target.parentElement.parentElement.parentElement;
+        var filaArray = [...fila.children];
+        const id = fila.dataset.id;
+        fetch(`/administrador/eliminar-paciente/`, {
+          method: 'DELETE',
+          body: new URLSearchParams({id})
+        }).then((response) => {
+          console.log(response)
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch((error) => alert(error))
+      }));
+
+    })
+
+  </script>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+      <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Telefono</th>
+          <th>Historial Medico</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Genero</th>
+        </tr>
+
+        <% pacientes.forEach(paciente=> { %>
+          <tr data-id="<%= paciente.Usuario.id %>">
+            <td data-name="idNew" contenteditable>
+              <%= paciente.Usuario.id %>
+            </td>
+            <td data-name="nombre" contenteditable>
+              <%= paciente.Usuario.nombre %>
+            </td>
+            <td data-name="email" contenteditable>
+              <%= paciente.Usuario.email %>
+            </td>
+            <td data-name="telefono" contenteditable>
+              <%= paciente.Usuario.telefono %>
+            </td>
+            <td data-name="historialMedico" contenteditable>
+              <%= paciente.historialMedico %>
+            </td>
+            <td data-name="fechaDeNacimiento" contenteditable>
+              <%= paciente.fechaDeNacimiento %>
+            </td>
+            <td data-name="genero" contenteditable>
+              <select name="genero" id="genero">
+                <option value="Masculino" <%= paciente.genero=="Masculino" = ? "selected": "" %> >Masculino</option>
+                <option value="Femenino" <%= paciente.genero=="Femenino" = ? "selected": "" %> >Femenino</option>
+              </select>|
+            </td>
+            <td>
+              <div class="d-flex flex-row justify-content-around align-items-center">
+                <button class="btnAct">Actualizar</button>
+                <button class="btnEli">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+
+      </table>
+
+      <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

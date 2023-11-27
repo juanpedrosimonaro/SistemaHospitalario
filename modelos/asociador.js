@@ -41,7 +41,7 @@ Factura.asociarPaciente(Paciente);
 
 Seguro.asociarPaciente(Paciente);
 
-module.exports = sequelize.sync().then(()=>
+module.exports = sequelize.sync({ alter: true }).then(()=>
 ({
     Usuario,
     Paciente,

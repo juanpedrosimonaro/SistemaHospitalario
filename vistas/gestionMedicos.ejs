@@ -1,0 +1,111 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+
+      document.querySelectorAll(".btnAct").forEach(btnAct => btnAct.addEventListener("click", (e) => {
+        e.preventDefault();
+        const fila = e.target.parentElement.parentElement.parentElement;
+        const filaArray = [...fila.children];
+        filaArray.pop();
+        const medico = {};
+        medico.id = fila.dataset.id;
+        filaArray.forEach((celda) => {
+          medico[celda.dataset.name] = celda.innerText;
+        })
+        console.log(medico);
+        fetch(`/administrador/editar-medico/`, {
+          method: 'PUT',
+          body: new URLSearchParams(medico) 
+        }).then((response) => {
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch((error) => alert(error))
+      }));
+
+      document.querySelectorAll(".btnEli").forEach(btnEli => btnEli.addEventListener("click", (e) => {
+        var fila = e.target.parentElement.parentElement.parentElement;
+        var filaArray = [...fila.children];
+        const id = fila.dataset.id;
+        fetch(`/administrador/eliminar-medico/`, {
+          method: 'DELETE',
+          body: new URLSearchParams({id}) 
+        }).then((response) => {
+          console.log(response)
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch((error) => alert(error))
+      }));
+
+    })
+
+
+
+  </script>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+      <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Operaciones</th>
+        </tr>
+
+        <% medicos.forEach(medico=> { %>
+          <tr data-id="<%= medico.Usuario.id %>">
+            <td data-name="idNew" contenteditable>
+              <%= medico.Usuario.id %>
+            </td>
+            <td data-name="nombre" contenteditable>
+              <%= medico.Usuario.nombre %>
+            </td>
+            <td data-name="email" contenteditable>
+              <%= medico.Usuario.email %>
+            </td>
+            <td data-name="telefono" contenteditable>
+              <%= medico.Usuario.telefono %>
+            </td>
+            <td data-name="horaEntrada" contenteditable>
+              <%= medico.horaEntrada %>
+            </td>
+            <td data-name="horaSalidad" contenteditable>
+              <%= medico.horaSalida %>
+            </td>
+            <td data-name="especialidad" >
+              <select name="especialidadId" id="especialidadId">
+                <% if(!especialidades.some(es=>es.id == medico.Especialidad.id)) { %>
+                  <option value="0" disabled selected hidden>Seleccione una especialidad</option>
+                <% } %>
+                <% especialidades.forEach(especialidad=>{ %>
+                  <option value="<%= especialidad.id %>" <%=especialidad.id==medico.Especialidad.id ? "selected" : "" %> >
+                    <%= especialidad.nombre %>
+                  </option>
+                <% }) %>
+              </select>
+            </td>
+            <td>
+              <div class="d-flex flex-row justify-content-around align-items-center">
+                <button class="btnAct">Actualizar</button>
+                <button class="btnEli">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+
+            <tr data-id="<%= modalidades.length + 1 %>">
+              <td>
+              </td>
+              <td data-name="nombre" contenteditable></td>
+              <td><button id="nuevaModalidad">Nueva Modalidad</button></td>
+            </tr>
+
+      </table>
+
+      <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

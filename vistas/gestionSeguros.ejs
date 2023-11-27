@@ -1,0 +1,114 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+
+      document.querySelectorAll(".btnAct").forEach(btnAct => btnAct.addEventListener("click", (e) => {
+        e.preventDefault();
+        const fila = e.target.parentElement.parentElement.parentElement;
+        const filaArray = [...fila.children];
+        filaArray.pop();
+        const seguro = {};
+        const id = fila.dataset.id;
+        filaArray.forEach((celda) => {
+          seguro[celda.dataset.name] = celda.innerText;
+        })
+        console.log(seguro);
+        fetch(`/administrador/editar-seguro/${id}`, {
+          method: 'PUT',
+          body: new URLSearchParams(seguro) 
+        }).then((response) => {
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch((error) => alert(error))
+      }));
+
+      document.querySelectorAll(".btnEli").forEach(btnEli => btnEli.addEventListener("click", (e) => {
+        var fila = e.target.parentElement.parentElement.parentElement;
+        var filaArray = [...fila.children];
+        const id = fila.dataset.id;
+        fetch(`/administrador/eliminar-seguro/`, {
+          method: 'DELETE',
+          body: new URLSearchParams({id}) 
+        }).then((response) => {
+          console.log(response)
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch((error) => alert(error))
+      }));
+
+      document.getElementById("nuevoSeguro").addEventListener("click", (e) => {
+        e.preventDefault();
+        const fila = e.target.parentElement.parentElement;
+        const filaArray = [...fila.children];
+        filaArray.pop();
+        const seguro = {};
+        const id = fila.dataset.id;
+        filaArray.forEach((celda) => {
+          seguro[celda.dataset.name] = celda.innerText;
+        })
+        console.log(seguro)
+        fetch(`/administrador/ingresar-seguro/`, {
+          method: 'POST',
+          body: new URLSearchParams(seguro)
+        }).then((response) => {
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch((error) => alert(error))
+      });
+
+    })
+
+
+
+  </script>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+      <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Operaciones</th>
+        </tr>
+
+        <% seguros.forEach(seguro=> { %>
+          <tr data-id="<%= seguro.id %>">
+            <td data-name="idNew" contenteditable>
+              <%= seguro.id %>
+            </td>
+            <td data-name="nombre" contenteditable>
+              <%= seguro.nombre %>
+            </td>
+            <td data-name="cobertura" contenteditable>
+              <%= seguro.cobertura %>
+            </td>
+            <td data-name="nombreCompania" contenteditable>
+              <%= seguro.nombreCompania %>
+            </td>
+            <td>
+              <div class="d-flex flex-row justify-content-around align-items-center">
+                <button class="btnAct">Actualizar</button>
+                <button class="btnEli">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+
+            <tr data-id="<%= seguros.length + 1 %>">
+              <td>
+              </td>
+              <td data-name="nombre" contenteditable></td>
+              <td><button id="nuevoSeguro">Nuevo Seguro</button></td>
+            </tr>
+
+      </table>
+
+      <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>
