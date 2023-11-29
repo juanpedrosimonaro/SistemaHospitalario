@@ -48,10 +48,10 @@ const establecerCita = async (req,res) =>{
   console.log(fecha);
   const motivo = req.body.motivo;
   const { Paciente } = obtenerUsuario(req.cookies.token);
-  res.redirect('/paciente/')
   try{
     const { Cita } = await seqSync;
     const cita = await Cita.create({MedicoId,PacienteId:Paciente.id,fecha,motivo});
+    res.redirect('/paciente/')
   }catch(error){
     console.log(error)
   }
@@ -59,13 +59,13 @@ const establecerCita = async (req,res) =>{
 
 const mostrarFactura = async (req,res) =>{
   const id = req.params.id
-  const PacienteId = req.usuario.Paciente.id;
+  const usuario = obtenerUsuario(req.cookies.token);
   try{
-    const { Paciente } = await seqSync;
-    const paciente = await Paciente.findByPk(PacienteId);
+    const { Paciente, Factura } = await seqSync;
+    const paciente = await Paciente.findByPk(usuario.Paciente.id);
     const facturasPaciente = await paciente.getFacturas();
     const factura = await Factura.findByPk(id);
-    if(!facturasPaciente.includes(factura)) throw new Error("La factura no le pertenece al paciente")
+    if(!facturasPaciente.map(paFa=>paFa.id).includes(factura.id)) throw new Error("La factura no le pertenece al paciente")
     res.render('mostrarFactura',{factura,title:"Factura"})
   }catch(error){
     console.log(error)
@@ -74,14 +74,15 @@ const mostrarFactura = async (req,res) =>{
 
 const mostrarReceta = async (req,res) =>{
   const id = req.params.id
-  const PacienteId = req.usuario.Paciente.id;
+  const usuario = obtenerUsuario(req.cookies.token);
   try{
-    const { Paciente, Receta, Posologia, Medicamento } = await seqSync;
-    const paciente = await Paciente.findByPk(PacienteId);
-    const pacienteRecetas = paciente.getRecetas();
+    const { Paciente, Receta, Medicamento, Medico } = await seqSync;
+    const paciente = await Paciente.findByPk(usuario.Paciente.id);
+    const pacienteRecetas = await paciente.getReceta();
+    console.log(pacienteRecetas);
     const receta = await Receta.findByPk(id,{include:[Medicamento,Paciente,Medico]});
-    const verificarReceta = pacienteReceta.find(rec => rec.id == receta.id );
-    if(verificarReceta == undefined) throw new Error("La receta no le pertenece al paciente")
+    console.log(receta)
+    if(!pacienteRecetas.map(paRe=>paRe.id).includes(receta.id))throw new Error("La receta no le pertenece al paciente");
     res.render('mostrarReceta',{receta,title:"Receta"})
 
   }catch(error){

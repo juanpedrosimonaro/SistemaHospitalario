@@ -1,0 +1,113 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+
+      document.querySelectorAll(".btnEli").forEach(btnEli => btnEli.addEventListener("click", (e) => {
+        var fila = e.target.parentElement.parentElement.parentElement;
+        var filaArray = [...fila.children];
+        const id = fila.dataset.id;
+        fetch(`/medico/eliminar-medicamento-receta/<%= receta.id %>`, {
+          method: 'DELETE',
+          body: new URLSearchParams({id})
+        }).then((response) => {
+          console.log(response)
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch((error) => alert(error))
+      }));
+
+      document.getElementById("nuevoMedicamento").addEventListener("click", (e) => {
+        e.preventDefault();
+        const fila = e.target.parentElement.parentElement;
+        const filaArray = [...fila.children];
+        filaArray.pop();
+        const medicamento = {};
+        filaArray.forEach((celda) => {
+          celda.dataset.name == "MedicamentoId" || celda.dataset.name == "fechaLimite" ?
+          medicamento[celda.dataset.name] = celda.children[0].value :
+          medicamento[celda.dataset.name] = celda.innerText;
+        })
+        console.log(medicamento)
+        fetch(`/medico/agregar-medicamento-receta/<%= receta.id %>`, {
+          method: 'POST',
+          body: new URLSearchParams(medicamento)
+        }).then((response) => {
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch((error) => alert(error))
+      });
+
+    })
+
+
+
+  </script>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+      <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Cantidad</th>
+          <th>Frecuencia</th>
+          <th>Fecha Limite</th>
+          <th>Operaciones</th>
+        </tr>
+
+        <% receta.Medicamentos.forEach(medicamento=> {  %>
+          <tr data-id="<%= medicamento.id %>">
+            <td data-name="idNew" contenteditable>
+              <%= medicamento.id %>
+            </td>
+            <td data-name="nombre" contenteditable>
+              <%= medicamento.nombre %>
+            </td>
+            <td data-name="cantidad" contenteditable>
+              <%= medicamento.Posologia.cantidad %>
+            </td>
+            <td data-name="frecuencia" contenteditable>
+              <%= medicamento.Posologia.frecuencia %>
+            </td>
+            <td data-name="fechaLimite" contenteditable>
+              <%= medicamento.Posologia.fechaLimite %>
+            </td>
+            <td>
+              <div class="d-flex flex-row justify-content-around align-items-center">
+                <button class="btnEli">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+
+            <tr data-id="<%= medicamentos.length + 1 %>">
+              <td>
+              </td>
+              <td data-name="MedicamentoId" >
+                <select name="MedicamentoId" id="MedicamentoId">
+                  <option value="0" disabled selected hidden>Medicamento</option>
+                  <% medicamentos.forEach(medicamento=>{%>
+                    <option value="<%= medicamento.id %>">
+                      <%= medicamento.nombre %>
+                    </option>
+                  <%}) %> 
+                </select>
+              </td>
+              <td data-name="cantidad" contenteditable></td>
+              <td data-name="frecuencia" contenteditable></td>
+              <td data-name="fechaLimite" >
+                <input type="date" name="fechaLimite" id="fechaLimite" value="<%= new Date().toISOString().substring(0,10) %>">
+              </td>
+              <td><button id="nuevoMedicamento">Nuevo Medicamento</button></td>
+            </tr>
+
+      </table>
+
+      <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

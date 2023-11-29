@@ -1,0 +1,73 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+    <h2>Citas</h2>
+    <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+      <tr>
+        <th>ID</th>
+        <th>Paciente</th>
+        <th>Motivo</th>
+        <th>Fecha</th>
+        <th>Operaciones</th>
+      </tr>
+
+      <% medico.Cita.forEach(cita=> { %>
+        <tr data-id="<%= cita.id %>">
+          <td data-name="idNew" >
+            <%= cita.id %>
+          </td>
+          <td data-name="medico" >
+            <%= cita.Paciente.Usuario.nombre %>
+          </td>
+          <td data-name="motivo">
+            <%= cita.motivo %>
+          </td>
+          <td data-name="fecha">
+            <%= cita.fecha %>
+          </td>
+          <td>
+            <% if(cita.fecha < (new Date())) { %>
+              <div class="d-flex flex-row justify-content-around align-items-center">
+                <a href="/medico/establecer-receta/<%= cita.Paciente.id %>"><button>Crear Receta</button></a>
+                <a href="/medico/establecer-factura/<%= cita.Paciente.id %>"><button>Facturar</button></a>
+              </div>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+
+    </table>
+
+    <h2>Recetas</h2>
+    <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+      <tr>
+        <th>ID</th>
+        <th>Paciente</th>
+        <th>Fecha Creado</th>
+        <th>Operación</th>
+      </tr>
+
+      <% medico.Receta.forEach(receta=> { %>
+        <tr data-id="<%= receta.id %>">
+          <td data-name="idNew" >
+            <%= receta.id %>
+          </td>
+          <td data-name="paciente" >
+            <%= receta.Paciente.Usuario.nombre %>
+          </td>
+          <td data-name="fechaCreado">
+            <%= receta.createdAt %>
+          </td>
+          <td><a href="/medico/mostrar-receta/<%= receta.id %>"><button>Mostrar Receta</button></a></td>
+        </tr>
+      <% }) %>
+
+    </table>
+
+
+    <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

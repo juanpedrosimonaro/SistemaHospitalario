@@ -5,7 +5,7 @@ class Posologia extends Model{}
 
 Posologia.init({
   cantidad: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
   },
   frecuencia: {
     type: DataTypes.STRING

@@ -50,7 +50,7 @@
             <%= receta.Medico.Usuario.nombre %>
           </td>
           <td data-name="fechaCreado">
-            <%= cita.created_at %>
+            <%= receta.created_at %>
           </td>
           <td><a href="/paciente/mostrar-receta/<%= receta.id %>"><button>Mostrar Receta</button></a></td>
         </tr>
@@ -68,12 +68,12 @@
       </tr>
 
       <% paciente.Facturas.forEach(factura=> { %>
-        <tr data-id="<%= receta.id %>">
+        <tr data-id="<%= factura.id %>">
           <td data-name="idNew" >
             <%= factura.id %>
           </td>
           <td data-name="costo" >
-            <%= factura.costo %>
+            <%= factura.costos %>
           </td>
           <td data-name="serviciosPrestados">
             <%= factura.serviciosPrestados %>

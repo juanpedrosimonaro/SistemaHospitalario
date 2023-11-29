@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
 const authRutas = require('./rutas/authRutas');
 const pacienteRutas = require('./rutas/pacienteRutas');
-//const medicoRutas = require('./rutas/medicoRutas');
+const medicoRutas = require('./rutas/medicoRutas');
 const administradorRutas = require('./rutas/administradorRutas');
 
 // express app
@@ -61,11 +61,9 @@ app.get('/',verificarToken, (req,res)=>{
   switch(req.usuario.tipo){
     case "Paciente":
       res.redirect('/paciente/')
-      // res.render('gestionPaciente', {title:"Pagina Principal"});
       break;
     case "Medico":
       res.redirect('/medico/')
-      //res.render('gestionMedico', {title:"Pagina Principal"});
       break;
     case "Administrador":
       console.log("Redirigiendo...")
@@ -78,7 +76,7 @@ app.get('/',verificarToken, (req,res)=>{
 })
 app.use('/auth',authRutas);
 app.use('/paciente', verificarToken, verificarPaciente, pacienteRutas);
-//app.use('/medico', verificarToken, verificarMedico, medicoRutas);
+app.use('/medico', verificarToken, verificarMedico, medicoRutas);
 app.use('/administrador', verificarToken, verificarAdministrador, administradorRutas);
 
 
