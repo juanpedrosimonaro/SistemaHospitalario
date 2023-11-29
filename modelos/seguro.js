@@ -20,7 +20,7 @@ Seguro.init({
 },{ sequelize });
 
 Seguro.asociarPaciente = (Paciente) =>{
-  Seguro.belongsToMany(Paciente,{through:"Paciente_Seguro", onDelete:"cascade"});
+  Seguro.hasMany(Paciente);
 }
 
 module.exports = Seguro;
