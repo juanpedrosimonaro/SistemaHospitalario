@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
 const authRutas = require('./rutas/authRutas');
-//const pacienteRutas = require('./rutas/pacienteRutas');
+const pacienteRutas = require('./rutas/pacienteRutas');
 //const medicoRutas = require('./rutas/medicoRutas');
 const administradorRutas = require('./rutas/administradorRutas');
 
@@ -16,7 +16,6 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 const verificarToken = (req, res, next) => {
-  console.log(req.cookies)
   const token = req.cookies.token;
   if (!token) {
     return res.redirect('/auth/iniciar-sesion');
@@ -31,7 +30,9 @@ const verificarToken = (req, res, next) => {
   });
 }
 const verificarPaciente = (req, res, next) => {
-  if(req.usuario && req.usuario.rol == "Paciente"){
+  console.log("Verificando...")
+  console.log(req.usuario)
+  if(req.usuario && req.usuario.tipo == "Paciente"){
     next()
   }else{
     return res.status(403).send('Acceso denegado');
@@ -39,7 +40,7 @@ const verificarPaciente = (req, res, next) => {
 }
 
 const verificarMedico = (req, res, next) => {
-  if(req.usuario && req.usuario.rol == "Medico"){
+  if(req.usuario && req.usuario.tipo == "Medico"){
     next()
   }else{
     return res.status(403).send('Acceso denegado');
@@ -48,6 +49,7 @@ const verificarMedico = (req, res, next) => {
 
 const verificarAdministrador = (req, res, next) => {
   if(req.usuario && req.usuario.tipo == "Administrador"){
+    console.log("Verificado")
     next()
   }else{
     return res.status(403).send('Acceso denegado');
@@ -66,6 +68,7 @@ app.get('/',verificarToken, (req,res)=>{
       //res.render('gestionMedico', {title:"Pagina Principal"});
       break;
     case "Administrador":
+      console.log("Redirigiendo...")
       res.redirect('/administrador/')
       res.render('gestionAdministrador', {title:"Pagina Principal"});
       break;
@@ -74,9 +77,9 @@ app.get('/',verificarToken, (req,res)=>{
   }
 })
 app.use('/auth',authRutas);
-//app.use('/paciente', verificarPaciente, pacienteRutas);
-//app.use('/medico', verificarMedico, medicoRutas);
-app.use('/administrador', verificarAdministrador, administradorRutas);
+app.use('/paciente', verificarToken, verificarPaciente, pacienteRutas);
+//app.use('/medico', verificarToken, verificarMedico, medicoRutas);
+app.use('/administrador', verificarToken, verificarAdministrador, administradorRutas);
 
 
 const server = app.listen(3000,()=>{

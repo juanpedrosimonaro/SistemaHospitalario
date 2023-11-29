@@ -22,6 +22,7 @@ Paciente.asociarReceta(Receta);
 Paciente.asociarFactura(Factura);
 Paciente.asociarSeguro(Seguro);
 
+Medico.asociarUsuario(Usuario);
 Medico.asociarCita(Cita);
 Medico.asociarReceta(Receta);
 Medico.asociarEspecialidad(Especialidad);
@@ -52,6 +53,7 @@ module.exports = sequelize.sync({ alter: true }).then(()=>
     Factura,
     Seguro,
     Especialidad,
-    Posologia
+    Posologia,
+    Medicamento
 })
 );

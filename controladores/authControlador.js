@@ -10,8 +10,8 @@ const loguearUsuario = async (req,res) => {
   const nombre = req.body.nombre;
   const contrasena = req.body.contrasena;
   try{
-    const { Usuario } = await seqSync;
-    const usuario = await Usuario.findOne({where:{nombre}})
+    const { Usuario, Paciente, Medico, Administrador } = await seqSync;
+    const usuario = await Usuario.findOne({where:{nombre},include:[Paciente, Medico, Administrador]})
     bcrypt.compare(contrasena, usuario.contrasena, (err,result)=>{
       if(result){
         console.log("Contraseña correcta");
@@ -97,7 +97,7 @@ const registrarUsuario = async (req,res) => {
 
 const cerrarSesion = (req,res) =>{
   res.clearCookie('token');
-  res.redirect('/auth/login');
+  res.redirect('/auth/iniciar-sesion');
 }
 
 module.exports = {

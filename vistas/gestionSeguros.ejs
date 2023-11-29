@@ -10,12 +10,12 @@
         const filaArray = [...fila.children];
         filaArray.pop();
         const seguro = {};
-        const id = fila.dataset.id;
+        seguro.id = fila.dataset.id;
         filaArray.forEach((celda) => {
           seguro[celda.dataset.name] = celda.innerText;
         })
         console.log(seguro);
-        fetch(`/administrador/editar-seguro/${id}`, {
+        fetch(`/administrador/editar-seguro/`, {
           method: 'PUT',
           body: new URLSearchParams(seguro) 
         }).then((response) => {
@@ -73,6 +73,7 @@
         <tr>
           <th>ID</th>
           <th>Nombre</th>
+          <th>Cobertura</th>
           <th>Operaciones</th>
         </tr>
 
@@ -87,9 +88,6 @@
             <td data-name="cobertura" contenteditable>
               <%= seguro.cobertura %>
             </td>
-            <td data-name="nombreCompania" contenteditable>
-              <%= seguro.nombreCompania %>
-            </td>
             <td>
               <div class="d-flex flex-row justify-content-around align-items-center">
                 <button class="btnAct">Actualizar</button>
@@ -103,6 +101,7 @@
               <td>
               </td>
               <td data-name="nombre" contenteditable></td>
+              <td data-name="cobertura" contenteditable></td>
               <td><button id="nuevoSeguro">Nuevo Seguro</button></td>
             </tr>
 

@@ -1,0 +1,16 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+    <h1>Factura: <%= factura.id %></h1><br>
+    <ul>
+      <li>Costo: <%= factura.costo %> </li>
+      <li>Servicios Prestados: <%= factura.serviciosPrestados %> </li>
+      <li>Estado: <%= factura.estado %> </li>
+    </ul>
+
+      <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

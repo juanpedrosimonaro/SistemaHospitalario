@@ -1,0 +1,69 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+  <script>
+    const especialidades = <%- JSON.stringify(especialidades) %>
+    const medicos = especialidades.reduce((acum,esp)=>acum.concat(esp.Medicos),[])
+    function rellenarHoras(){
+      const MedicoId = document.getElementById("MedicoId").value;
+      const fecha = document.getElementById("fecha").value;
+      if(MedicoId){
+        const medico=medicos.find(med=>med.id==MedicoId) 
+        
+        var horasOcupadas = medico.Cita.filter(cita=>cita.fecha.split('T')[0]==fecha).map(cita=>(new Date(cita.fecha).getHours()));
+        console.log(horasOcupadas)
+        var todasLasHoras = []
+        const horaEntrada = Number(medico.horaEntrada.split(":")[0])
+        const horaSalida = Number(medico.horaSalida.split(":")[0])
+        for (var i=horaEntrada; i<=horaSalida;i++ ){
+          if( i!=12 && i!=13 )
+          todasLasHoras.push(i) 
+        }
+        var horasDisponibles = todasLasHoras.filter(hora=>!horasOcupadas.includes(hora));
+        var selectHora = document.getElementById("hora");
+        selectHora.innerHTML = '';
+
+        horasDisponibles.forEach(hora=>{
+          const option = document.createElement('option');
+          option.value = `${hora}:00`;
+          option.text = `${hora}:00`;
+          selectHora.add(option)
+        })
+
+      }
+    }
+    document.addEventListener("DOMContentLoaded", function (event) {
+      document.getElementById("MedicoId").addEventListener("change", rellenarHoras)
+      document.getElementById("fecha").addEventListener("change", rellenarHoras)
+    })
+  </script>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+      <h1>Registrar Cita</h1>
+      <div class="inicio content">
+        <form action="/paciente/establecer-cita" method="POST">
+          <select name="MedicoId" id="MedicoId">
+            <option value="0" disabled selected hidden>Seleccione un Medico</option>
+            <% especialidades.forEach(especialidad =>{%> 
+              <optgroup label="<%= especialidad.nombre %>" >
+                <% especialidad.Medicos.forEach(medico=>{%> 
+                  <option value="<%= medico.id %>"> <%= medico.Usuario.nombre %> </option>
+                <%}); %>
+              </optgroup>
+            <%}); %>
+          </select><br>
+          <label for="fecha">Ingresar fecha de la cita:</label>
+          <input type="date" id="fecha" name="fecha" value="<%= new Date().toISOString().substring(0,10) %>" required><br>
+          <label for="hora">Ingresar la hora de la cita:</label>
+          <select name="hora" id="hora">
+          </select><br>
+          <label for="fecha">Ingresar motivo de la cita:</label>
+          <input type="text" id="motivo" name="motivo" required><br>
+          <input type="submit" value="Subir">
+        </form>
+      </div>
+
+      <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

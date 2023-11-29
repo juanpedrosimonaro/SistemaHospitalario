@@ -4,7 +4,7 @@ const mostrarOpciones = (req,res) => {
   res.render('gestionAdministrador',{title:"Gestion Administrador"})
 }
 
-const gestionPacientes = (req,res) => async {
+const gestionPacientes = async (req,res) => {
   try{
     const { Paciente, Usuario } = await seqSync
     const pacientes = await Paciente.findAll({include:Usuario});
@@ -28,7 +28,7 @@ const gestionPacientes = (req,res) => async {
 //    console.error(error);
 //  }
 //}
-const editarPaciente = (req,res) => async {
+const editarPaciente = async (req,res) =>{
   const id = Number(req.body.id);
   const nombre = req.body.nombre;
   const email = req.body.email;
@@ -54,7 +54,7 @@ const editarPaciente = (req,res) => async {
     console.error(error);
   }
 }
-const eliminarPaciente = (req,res) => async {
+const eliminarPaciente = async (req,res) => {
   const id = Number(req.body.id);
   const {Paciente, Usuario} = await seqSync;
   const usuario = await Usuario.findByPk(id);
@@ -63,7 +63,7 @@ const eliminarPaciente = (req,res) => async {
   usuario.destroy();
 }
 
-const gestionMedicos = (req,res) => async {
+const gestionMedicos = async (req,res) =>{
   try{
     const { Medico, Especialidad, Usuario } = await seqSync;
     const medicos = await Medico.findAll({include:[Usuario,Especialidad]});
@@ -73,8 +73,8 @@ const gestionMedicos = (req,res) => async {
     console.error(error);
   }
 }
-//const ingresarMedico = (req,res) => async {}
-const editarMedico = (req,res) => async {
+//const ingresarMedico = async (req,res) => {}
+const editarMedico = async (req,res) => {
   const id = Number(req.body.id);
   const nombre = req.body.nombre;
   const email = req.body.email;
@@ -101,7 +101,7 @@ const editarMedico = (req,res) => async {
     console.error(error);
   }
 }
-const eliminarMedico = (req,res) => async {
+const eliminarMedico = async (req,res) => {
   const id = Number(req.body.id);
   try{
     const {Paciente, Usuario} = await seqSync;
@@ -115,7 +115,7 @@ const eliminarMedico = (req,res) => async {
   }
 }
 
-const gestionEspecialidades = (req,res) => async {
+const gestionEspecialidades = async(req,res) => {
   try{
     const { Especialidad } = await seqSync;
     const especialidades = await Especialidad.findAll();
@@ -124,7 +124,7 @@ const gestionEspecialidades = (req,res) => async {
     console.error(error);
   }
 }
-const ingresarEspecialidad = (req,res) => async {
+const ingresarEspecialidad = async (req,res) => {
   const nombre = req.body.nombre;
   try{
     const { Especialidad } = await seqSync;
@@ -134,7 +134,7 @@ const ingresarEspecialidad = (req,res) => async {
     console.error(error);
   }
 }
-const editarEspecialidad = (req,res) => async {
+const editarEspecialidad = async (req,res) => {
   const id = req.body.id;
   const nombre = req.body.nombre;
   try{
@@ -148,7 +148,7 @@ const editarEspecialidad = (req,res) => async {
   }
 
 }
-const eliminarEspecialidad = (req,res) => async {
+const eliminarEspecialidad =  async (req,res) => {
   const id = req.body.id;
   try{
     const { Especialidad } = await seqSync;
@@ -160,26 +160,27 @@ const eliminarEspecialidad = (req,res) => async {
   }
 }
 
-const gestionSeguros = (req,res) => async {
+const gestionSeguros =  async (req,res) => {
   try{
     const { Seguro } = await seqSync;
-    const especialidades = await Seguro.findAll();
-    res.render('gestionSeguros',{especialidades,title:"Gestion Seguros"})
+    const seguros = await Seguro.findAll();
+    res.render('gestionSeguros',{seguros,title:"Gestion Seguros"})
   }catch(error){
     console.error(error);
   }
 }
-const ingresarSeguro = (req,res) => async {
+const ingresarSeguro = async (req,res) => {
   const nombre = req.body.nombre;
+  const cobertura = req.body.cobertura;
   try{
     const { Seguro } = await seqSync;
-    const seguro = await Seguro.create({nombre});
+    const seguro = await Seguro.create({nombre,cobertura});
     res.status(200).json({seguro});
   }catch(error){
     console.error(error);
   }
 }
-const editarSeguro = (req,res) => async {
+const editarSeguro = async (req,res) => {
   const id = req.body.id;
   const nombre = req.body.nombre;
   try{
@@ -192,7 +193,7 @@ const editarSeguro = (req,res) => async {
     console.error(error);
   }
 }
-const eliminarSeguro = (req,res) => async {
+const eliminarSeguro = async (req,res) => {
   const id = req.body.id;
   try{
     const { Seguro } = await seqSync;
@@ -204,14 +205,60 @@ const eliminarSeguro = (req,res) => async {
   }
 }
 
+const gestionMedicamentos =  async (req,res) => {
+  try{
+    const { Medicamento } = await seqSync;
+    const medicamentos = await Medicamento.findAll();
+    res.render('gestionMedicamentos',{medicamentos,title:"Gestion Medicamentos"})
+  }catch(error){
+    console.error(error);
+  }
+}
+const ingresarMedicamento = async (req,res) => {
+  const nombre = req.body.nombre;
+  try{
+    const { Medicamento } = await seqSync;
+    const medicamento = await Medicamento.create({nombre});
+    res.status(200).json({medicamento});
+  }catch(error){
+    console.error(error);
+  }
+}
+const editarMedicamento = async (req,res) => {
+  const id = req.body.id;
+  const nombre = req.body.nombre;
+  try{
+    const { Medicamento } = await seqSync;
+    const medicamento = await Medicamento.findByPk(id);
+    medicamento.nombre = nombre;
+    medicamento.save()
+    res.status(200).json({medicamento});
+  }catch(error){
+    console.error(error);
+  }
+}
+const eliminarMedicamento = async (req,res) => {
+  const id = req.body.id;
+  try{
+    const { Medicamento } = await seqSync;
+    const medicamento = await Medicamento.findByPk(id);
+    medicamento.destroy();
+    res.status(200).json({eliminado:true});
+  }catch(error){
+    console.error(error);
+  }
+}
 module.exports = {
+  
+  mostrarOpciones,
+
   gestionPacientes,
-  ingresarPaciente,
+  //ingresarPaciente,
   editarPaciente,
   eliminarPaciente,
 
   gestionMedicos,
-  ingresarMedico,
+  //ingresarMedico,
   editarMedico,
   eliminarMedico,
 
@@ -223,5 +270,10 @@ module.exports = {
   gestionSeguros,
   ingresarSeguro,
   editarSeguro,
-  eliminarSeguro
+  eliminarSeguro,
+
+  gestionMedicamentos,
+  ingresarMedicamento,
+  editarMedicamento,
+  eliminarMedicamento
 } 

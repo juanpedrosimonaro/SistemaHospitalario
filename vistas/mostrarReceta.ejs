@@ -1,0 +1,27 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+    <h1>Receta: <%= receta.id %></h1><br>
+    <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+      <tr>
+        <th>Medicamento</th>
+        <th>Cantidad</th>
+        <th>Frecuencia</th>
+        <th>Fecha Limite</th>
+      </tr>
+      <% recta.Medicamentos.forEach(medicamento=>{%> 
+      <tr>
+        <td><%= medicamento.nombre %></td> 
+        <td><%= medicamento.Posologia.cantidad %></td> 
+        <td><%= medicamento.Posologia.frecuencia %></td> 
+        <td><%= medicamento.Posologia.fechaLimite %></td> 
+      </tr>
+      <%}); %>
+    </table>
+
+      <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

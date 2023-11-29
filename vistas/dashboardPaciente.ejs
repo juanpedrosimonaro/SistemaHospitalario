@@ -1,0 +1,93 @@
+<html lang="en">
+<%- include("./parciales/cabecera.ejs") %>
+
+  <body>
+    <%- include("./parciales/barra.ejs") %>
+    <h2>Citas</h2>
+    <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+      <tr>
+        <th>ID</th>
+        <th>Medico</th>
+        <th>Motivo</th>
+        <th>Fecha</th>
+      </tr>
+
+      <% paciente.Cita.forEach(cita=> { %>
+        <tr data-id="<%= cita.id %>">
+          <td data-name="idNew" >
+            <%= cita.id %>
+          </td>
+          <td data-name="medico" >
+            <%= cita.Medico.Usuario.nombre %>
+          </td>
+          <td data-name="motivo">
+            <%= cita.motivo %>
+          </td>
+          <td data-name="fecha">
+            <%= cita.fecha %>
+          </td>
+        </tr>
+      <% }) %>
+
+    </table>
+    <a href="/paciente/establecer-cita"><button>Programa Cita</button></a>
+
+    <h2>Recetas</h2>
+    <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+      <tr>
+        <th>ID</th>
+        <th>Medico</th>
+        <th>Fecha Creado</th>
+        <th>Operación</th>
+      </tr>
+
+      <% paciente.Receta.forEach(receta=> { %>
+        <tr data-id="<%= receta.id %>">
+          <td data-name="idNew" >
+            <%= receta.id %>
+          </td>
+          <td data-name="medico" >
+            <%= receta.Medico.Usuario.nombre %>
+          </td>
+          <td data-name="fechaCreado">
+            <%= cita.created_at %>
+          </td>
+          <td><a href="/paciente/mostrar-receta/<%= receta.id %>"><button>Mostrar Receta</button></a></td>
+        </tr>
+      <% }) %>
+
+    </table>
+
+    <h2>Facturas</h2>
+    <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+      <tr>
+        <th>ID</th>
+        <th>Costo</th>
+        <th>Servicios Prestado</th>
+        <th>Estado</th>
+      </tr>
+
+      <% paciente.Facturas.forEach(factura=> { %>
+        <tr data-id="<%= receta.id %>">
+          <td data-name="idNew" >
+            <%= factura.id %>
+          </td>
+          <td data-name="costo" >
+            <%= factura.costo %>
+          </td>
+          <td data-name="serviciosPrestados">
+            <%= factura.serviciosPrestados %>
+          </td>
+          <td data-name="estado">
+            <%= factura.estado %>
+          </td>
+          <td><a href="/paciente/mostrar-factura/<%= factura.id %>"><button>Mostrar Factura</button></a></td>
+        </tr>
+      <% }) %>
+
+    </table>
+
+    <%- include("./parciales/fondo.ejs") %>
+  </body>
+
+</html>

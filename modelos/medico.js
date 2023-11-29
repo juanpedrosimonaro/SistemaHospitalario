@@ -9,17 +9,20 @@ Medico.init({
     autoIncrement: true,
     primaryKey: true
   },
-  horaInicial: {
+  horaEntrada: {
     type: DataTypes.TIME,
     allowNull: false
   },
 
-  horaFinal: {
+  horaSalida: {
     type: DataTypes.TIME,
     allowNull: false
   }
 },{ sequelize });
 
+Medico.asociarUsuario = (Usuario) =>{
+  Medico.belongsTo(Usuario);
+}
 
 Medico.asociarCita = (Cita) =>{
   Medico.hasMany(Cita);
@@ -32,5 +35,7 @@ Medico.asociarReceta = (Receta) =>{
 Medico.asociarEspecialidad = (Especialidad) =>{
   Medico.belongsTo(Especialidad);
 }
+
+
 
 module.exports = Medico;

@@ -25,4 +25,9 @@ router.post('/ingresar-seguro',administradorControlador.ingresarSeguro);
 router.put('/editar-seguro',administradorControlador.editarSeguro);
 router.delete('/eliminar-seguro',administradorControlador.eliminarSeguro);
 
+router.get('/gestion-medicamentos',administradorControlador.gestionMedicamentos);
+router.post('/ingresar-medicamento',administradorControlador.ingresarMedicamento);
+router.put('/editar-medicamento',administradorControlador.editarMedicamento);
+router.delete('/eliminar-medicamento',administradorControlador.eliminarMedicamento);
+
 module.exports = router;

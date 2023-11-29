@@ -9,15 +9,15 @@
         const fila = e.target.parentElement.parentElement.parentElement;
         const filaArray = [...fila.children];
         filaArray.pop();
-        const especialidad = {};
-        especialidad.id = fila.dataset.id;
+        const medicamento = {};
+        medicamento.id = fila.dataset.id;
         filaArray.forEach((celda) => {
-          especialidad[celda.dataset.name] = celda.innerText;
+          medicamento[celda.dataset.name] = celda.innerText;
         })
-        console.log(especialidad);
-        fetch(`/administrador/editar-especialidad/`, {
+        console.log(medicamento);
+        fetch(`/administrador/editar-medicamento/`, {
           method: 'PUT',
-          body: new URLSearchParams(especialidad)
+          body: new URLSearchParams(medicamento)
         }).then((response) => {
           if (response.ok) {
             location.reload();
@@ -29,7 +29,7 @@
         var fila = e.target.parentElement.parentElement.parentElement;
         var filaArray = [...fila.children];
         const id = fila.dataset.id;
-        fetch(`/administrador/eliminar-especialidad/`, {
+        fetch(`/administrador/eliminar-medicamento/`, {
           method: 'DELETE',
           body: new URLSearchParams({id})
         }).then((response) => {
@@ -40,20 +40,20 @@
         }).catch((error) => alert(error))
       }));
 
-      document.getElementById("nuevaEspecialidad").addEventListener("click", (e) => {
+      document.getElementById("nuevoMedicamento").addEventListener("click", (e) => {
         e.preventDefault();
         const fila = e.target.parentElement.parentElement;
         const filaArray = [...fila.children];
         filaArray.pop();
-        const especialidad = {};
+        const medicamento = {};
         const id = fila.dataset.id;
         filaArray.forEach((celda) => {
-          especialidad[celda.dataset.name] = celda.innerText;
+          medicamento[celda.dataset.name] = celda.innerText;
         })
-        console.log(especialidad)
-        fetch(`/administrador/ingresar-especialidad/`, {
+        console.log(medicamento)
+        fetch(`/administrador/ingresar-medicamento/`, {
           method: 'POST',
-          body: new URLSearchParams(especialidad)
+          body: new URLSearchParams(medicamento)
         }).then((response) => {
           if (response.ok) {
             location.reload();
@@ -76,13 +76,13 @@
           <th>Operaciones</th>
         </tr>
 
-        <% especialidades.forEach(especialidad=> { %>
-          <tr data-id="<%= especialidad.id %>">
+        <% medicamentos.forEach(medicamento=> { %>
+          <tr data-id="<%= medicamento.id %>">
             <td data-name="idNew" contenteditable>
-              <%= especialidad.id %>
+              <%= medicamento.id %>
             </td>
             <td data-name="nombre" contenteditable>
-              <%= especialidad.nombre %>
+              <%= medicamento.nombre %>
             </td>
             <td>
               <div class="d-flex flex-row justify-content-around align-items-center">
@@ -93,11 +93,11 @@
           </tr>
           <% }) %>
 
-            <tr data-id="<%= especialidades.length + 1 %>">
+            <tr data-id="<%= medicamentos.length + 1 %>">
               <td>
               </td>
               <td data-name="nombre" contenteditable></td>
-              <td><button id="nuevaEspecialidad">Nueva Especialidad</button></td>
+              <td><button id="nuevoMedicamento">Nuevo Medicamento</button></td>
             </tr>
 
       </table>
