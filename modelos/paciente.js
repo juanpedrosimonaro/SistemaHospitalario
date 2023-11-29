@@ -37,7 +37,7 @@ Paciente.asociarFactura = (Factura) =>{
 }
 
 Paciente.asociarSeguro = (Seguro) =>{
-  Paciente.hasMany(Seguro);
+  Paciente.belongsToMany(Seguro,{through:"Paciente_Seguro",onDelete:"cascade"});
 }
 
 module.exports = Paciente;

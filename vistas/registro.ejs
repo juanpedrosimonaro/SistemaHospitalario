@@ -23,6 +23,7 @@
           datos.historialMedico = document.getElementById('historialMedico').value;
           datos.fechaDeNacimiento = document.getElementById('fechaDeNacimiento').value;
           datos.genero = document.getElementById('genero').value;
+          datos.SeguroId = document.getElementById('seguro').value;
         } else if (tipoUsuario == 'Medico') {
           datos.horaEntrada = document.getElementById('horaEntrada').value;
           datos.horaSalida = document.getElementById('horaSalida').value;
@@ -34,9 +35,12 @@
           method: 'POST',
           body: new URLSearchParams(datos)
         }).then((response) => {
+          console.log(response)
           if (response.ok) {
-            console.log(response);
+            alert("intentando redireccionar")
+            window.location.href = '/';
           }
+          alert(response)
         }).catch((error) => alert(error))
       })
     })
@@ -73,6 +77,12 @@
             </select><br>
             <label for="historialMedico">Ingrese Historial Médico:</label>
             <textarea name="historialMedico" id="historialMedico"></textarea><br>
+            <select id="seguro" name="seguro">
+              <option value="" disabled selected hidden>Seleccione su seguro</option>
+              <% seguros.forEach(seguro =>{ %>
+                <option value="<%= seguro.id %>"><%= seguro.nombre %></option>
+              <%}) %>
+            </select>
           </div>
           <div id="camposMedico" style="display: none;">
             <label for="horaEntrada">Hora de entrada:</label>
