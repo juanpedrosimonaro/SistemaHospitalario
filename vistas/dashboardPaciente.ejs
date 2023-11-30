@@ -3,91 +3,91 @@
 
   <body>
     <%- include("./parciales/barra.ejs") %>
-    <h2>Citas</h2>
-    <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
-      <tr>
-        <th>ID</th>
-        <th>Medico</th>
-        <th>Motivo</th>
-        <th>Fecha</th>
-      </tr>
-
-      <% paciente.Cita.forEach(cita=> { %>
-        <tr data-id="<%= cita.id %>">
-          <td data-name="idNew" >
-            <%= cita.id %>
-          </td>
-          <td data-name="medico" >
-            <%= cita.Medico.Usuario.nombre %>
-          </td>
-          <td data-name="motivo">
-            <%= cita.motivo %>
-          </td>
-          <td data-name="fecha">
-            <%= cita.fecha %>
-          </td>
+      <h2>Citas</h2>
+      <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+        <tr>
+          <th>ID</th>
+          <th>Medico</th>
+          <th>Motivo</th>
+          <th>Fecha</th>
         </tr>
-      <% }) %>
 
-    </table>
-    <a href="/paciente/establecer-cita"><button>Programa Cita</button></a>
+        <% paciente.Cita.forEach(cita=> { %>
+          <tr data-id="<%= cita.id %>">
+            <td data-name="idNew">
+              <%= cita.id %>
+            </td>
+            <td data-name="medico">
+              <%= cita.Medico.Usuario.nombre %>
+            </td>
+            <td data-name="motivo">
+              <%= cita.motivo %>
+            </td>
+            <td data-name="fecha">
+              <%= cita.fecha %>
+            </td>
+          </tr>
+          <% }) %>
 
-    <h2>Recetas</h2>
-    <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
-      <tr>
-        <th>ID</th>
-        <th>Medico</th>
-        <th>Fecha Creado</th>
-        <th>Operación</th>
-      </tr>
+      </table>
+      <a href="/paciente/establecer-cita"><button>Programa Cita</button></a>
 
-      <% paciente.Receta.forEach(receta=> { %>
-        <tr data-id="<%= receta.id %>">
-          <td data-name="idNew" >
-            <%= receta.id %>
-          </td>
-          <td data-name="medico" >
-            <%= receta.Medico.Usuario.nombre %>
-          </td>
-          <td data-name="fechaCreado">
-            <%= receta.created_at %>
-          </td>
-          <td><a href="/paciente/mostrar-receta/<%= receta.id %>"><button>Mostrar Receta</button></a></td>
+      <h2>Recetas</h2>
+      <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+        <tr>
+          <th>ID</th>
+          <th>Medico</th>
+          <th>Fecha Creado</th>
+          <th>Operaciï¿½n</th>
         </tr>
-      <% }) %>
 
-    </table>
+        <% paciente.Receta.forEach(receta=> { %>
+          <tr data-id="<%= receta.id %>">
+            <td data-name="idNew">
+              <%= receta.id %>
+            </td>
+            <td data-name="medico">
+              <%= receta.Medico.Usuario.nombre %>
+            </td>
+            <td data-name="fechaCreado">
+              <%= receta.createdAt %>
+            </td>
+            <td><a href="/paciente/mostrar-receta/<%= receta.id %>"><button>Mostrar Receta</button></a></td>
+          </tr>
+          <% }) %>
 
-    <h2>Facturas</h2>
-    <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
-      <tr>
-        <th>ID</th>
-        <th>Costo</th>
-        <th>Servicios Prestado</th>
-        <th>Estado</th>
-      </tr>
+      </table>
 
-      <% paciente.Facturas.forEach(factura=> { %>
-        <tr data-id="<%= factura.id %>">
-          <td data-name="idNew" >
-            <%= factura.id %>
-          </td>
-          <td data-name="costo" >
-            <%= factura.costos %>
-          </td>
-          <td data-name="serviciosPrestados">
-            <%= factura.serviciosPrestados %>
-          </td>
-          <td data-name="estado">
-            <%= factura.estado %>
-          </td>
-          <td><a href="/paciente/mostrar-factura/<%= factura.id %>"><button>Mostrar Factura</button></a></td>
+      <h2>Facturas</h2>
+      <table style="width: 100%; table-layout:fixed; overflow-wrap:break-word">
+        <tr>
+          <th>ID</th>
+          <th>Costo</th>
+          <th>Servicios Prestado</th>
+          <th>Estado</th>
         </tr>
-      <% }) %>
 
-    </table>
+        <% paciente.Facturas.forEach(factura=> { %>
+          <tr data-id="<%= factura.id %>">
+            <td data-name="idNew">
+              <%= factura.id %>
+            </td>
+            <td data-name="costo">
+              <%= factura.costos %>
+            </td>
+            <td data-name="serviciosPrestados">
+              <%= factura.serviciosPrestados %>
+            </td>
+            <td data-name="estado">
+              <%= factura.estado %>
+            </td>
+            <td><a href="/paciente/mostrar-factura/<%= factura.id %>"><button>Mostrar Factura</button></a></td>
+          </tr>
+          <% }) %>
 
-    <%- include("./parciales/fondo.ejs") %>
+      </table>
+
+      <%- include("./parciales/fondo.ejs") %>
   </body>
 
 </html>

@@ -66,7 +66,7 @@ const registrarUsuario = async (req,res) => {
             const SeguroId = req.body.SeguroId;
             const seguro = await Seguro.findByPk(SeguroId);
             const paciente = await Paciente.create({fechaDeNacimiento,historialMedico,genero});
-            await paciente.addSeguro(seguro);
+            await paciente.setSeguro(seguro);
             await usuario.setPaciente(paciente);
             await usuario.reload({include:Paciente});
             break;
